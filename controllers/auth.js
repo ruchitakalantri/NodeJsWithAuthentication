@@ -48,26 +48,22 @@ exports.postSignup = (req, res, next) => {
       }
       //bcrypt package
       // hash value of 12 is considered highlly secured
-      return bcrypt.hash(password , 12);
-    
-    })
-    .then(hashedPassword => {
-        //create new user
-        const user = new User ({
-          email : email ,
-          password : hashedPassword,
-          cart : { items : [] }
+      return bcrypt
+        .hash(password , 12)  
+        .then(hashedPassword => {
+          //create new user
+          const user = new User ({
+            email : email ,
+            password : hashedPassword,
+            cart : { items : [] }
+          });
+          return user.save();
         });
-        return user.save();
-    })
-    .then(result => {
-      res.redirect('/login');
-    })
+      })
+      .then(result => {
+        res.redirect('/login');
+      })
     .catch(err => console.log(err));
-
-
-
-
 };
 
 exports.postLogout = (req, res, next) => {
