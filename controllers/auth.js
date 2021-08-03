@@ -1,3 +1,4 @@
+const user = require('../models/user');
 const User = require('../models/user');
 
 exports.getLogin = (req, res, next) => {
@@ -29,7 +30,39 @@ exports.postLogin = (req, res, next) => {
     .catch(err => console.log(err));
 };
 
-exports.postSignup = (req, res, next) => {};
+exports.postSignup = (req, res, next) => {
+  //extract info from incoming request
+  const email = req.body.email;
+  const password = req.body.password;
+  const confirmPassword = req.body.confirmPassword;
+
+  // validate later
+
+  //find email
+  User
+    .findOne({email : email})
+    .then(userDoc => {
+      if(userDoc) {
+        //have user..user already exist
+        return res.redirect('/signup');
+      }
+      //create new user
+      const user = new User ({
+        email : email ,
+        password : password,
+        cart : { items : [] }
+      });
+      return user.save();
+    })
+    .then(result => {
+      res.redirect('/login');
+    })
+    .catch(err => console.log(err));
+
+
+
+
+};
 
 exports.postLogout = (req, res, next) => {
   req.session.destroy(err => {
