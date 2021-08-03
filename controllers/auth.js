@@ -1,4 +1,4 @@
-const user = require('../models/user');
+const bcrypt = require('bcryptjs');
 const User = require('../models/user');
 
 exports.getLogin = (req, res, next) => {
@@ -46,13 +46,19 @@ exports.postSignup = (req, res, next) => {
         //have user..user already exist
         return res.redirect('/signup');
       }
-      //create new user
-      const user = new User ({
-        email : email ,
-        password : password,
-        cart : { items : [] }
-      });
-      return user.save();
+      //bcrypt package
+      // hash value of 12 is considered highlly secured
+      return bcrypt.hash(password , 12);
+    
+    })
+    .then(hashedPassword => {
+        //create new user
+        const user = new User ({
+          email : email ,
+          password : hashedPassword,
+          cart : { items : [] }
+        });
+        return user.save();
     })
     .then(result => {
       res.redirect('/login');
