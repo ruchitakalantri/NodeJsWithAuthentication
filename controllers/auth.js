@@ -85,7 +85,6 @@ exports.postSignup = (req, res, next) => {
   //extract info from incoming request
   const email = req.body.email;
   const password = req.body.password;
-  const confirmPassword = req.body.confirmPassword;
 
   // validate later
   const errors = validationResult(req);
@@ -97,18 +96,9 @@ exports.postSignup = (req, res, next) => {
       errorMessage : errors.array()[0].msg
     });;
   }
-  //find email
-  User
-    .findOne({email : email})
-    .then(userDoc => {
-      if(userDoc) {
-        req.flash('error' , 'E-mail Exist Already!! ');
-        //have user..user already exist
-        return res.redirect('/signup');
-      }
       //bcrypt package
       // hash value of 12 is considered highlly secured
-      return bcrypt
+     bcrypt
         .hash(password , 12)  
         .then(hashedPassword => {
           //create new user
@@ -128,9 +118,7 @@ exports.postSignup = (req, res, next) => {
           html : '<h1> You Signed Up Successfuly!! </h1>'
         });  
       })
-      .catch(err => console.log(err));
-    })
-    .catch(err => console.log(err));  
+      .catch(err => console.log(err)); 
 };
 
 exports.postLogout = (req, res, next) => {
