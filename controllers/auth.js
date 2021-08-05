@@ -11,7 +11,7 @@ const transporter = nodemailer
   .createTransport(
     sendgridTransport({
       auth : { 
-        api_key : 'SENDGRID_API_KEY_PASTE_HERE'                
+        api_key : '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'                
         }
       })
     );
@@ -113,7 +113,7 @@ exports.postSignup = (req, res, next) => {
         res.redirect('/login');
         return transporter.sendMail({
           to : email ,
-          from : 'shop@node-complete.com' ,
+          from : 'sjagtap@updatusinc.com' ,
           subject : 'SignUp Success',
           html : '<h1> You Signed Up Successfuly!! </h1>'
         });  
@@ -166,7 +166,7 @@ exports.postReset = (req,res,next) => {
         res.redirect('/');
         transporter.sendMail({
           to : req.body.email ,
-          from : 'shop@node-complete.com' ,
+          from : 'sjagtap@updatusinc.com' ,
           subject : 'Password Reset',
           html : `
             <p> You requested password reset</p>
@@ -197,7 +197,7 @@ exports.getNewPassword = (req,res,next) => {
         path: '/new-password',
         pageTitle: 'New Password',
         errorMessage : message,
-        userid : user._id.toString(),
+        userId : user._id.toString(),
         passwordToken : token
       });
     })
