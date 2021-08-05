@@ -12,7 +12,31 @@ router.get('/login', authController.getLogin);
 
 router.get('/signup', authController.getSignup);
 
-router.post('/login', authController.postLogin);
+router.post(
+    '/login', 
+    [
+        body('email')
+        .isEmail()
+        .withMessage('Please enter valid email')
+        .custom((value , {req}) => {
+        //async validator
+        return User
+            .findOne({email : value})
+            .then(userDoc => {
+                if(userDoc) {
+                    return Promise.reject('E-mail Is Incorrect!!');
+                }
+            });
+        }) ,
+        body(
+            'password' ,
+            'Please  enter valid password '
+            )
+            .isLength({min : 5 })
+            .isAlphanumeric() 
+    ],
+    authController.postLogin
+);
 
 router.post(
     '/signup',
@@ -21,7 +45,7 @@ router.post(
         .isEmail()
         .withMessage('Please enter valid email')
         .custom((value , {req}) => {
-            //async validator
+        //async validator
         return User
             .findOne({email : value})
             .then(userDoc => {
