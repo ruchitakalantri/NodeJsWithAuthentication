@@ -17,17 +17,8 @@ router.post(
     [
         body('email')
         .isEmail()
-        .withMessage('Please enter valid email')
-        .custom((value , {req}) => {
-        //async validator
-        return User
-            .findOne({email : value})
-            .then(userDoc => {
-                if(userDoc) {
-                    return Promise.reject('E-mail Is Incorrect!!');
-                }
-            });
-        }) ,
+        .withMessage('Please enter valid email') ,
+        
         body(
             'password' ,
             'Please  enter valid password '
