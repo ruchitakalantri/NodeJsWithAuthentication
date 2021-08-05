@@ -65,7 +65,7 @@ exports.postEditProduct = (req, res, next) => {
 
   Product.findById(prodId)
     .then(product => {
-      if(product.userId != req.user._id) {
+      if(product.userId.toString() !== req.user._id.toString()) {
         // wrong user is trying to edit product
         return res.redirect('/');
       }
