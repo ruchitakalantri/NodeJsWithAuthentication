@@ -17,19 +17,22 @@ router.post(
     [
         check('email')
         .isEmail()
-        .withMessage('Please enter valid email')
-        .custom((value , {req}) => {
-            if(value === 'test@test.com') {
-                throw new Error('This is forbidden emailid')
-            }
-            return true;
-        }) ,
+        .withMessage('Please enter valid email'),
+
         body(
             'password' ,
             'Please  enter valid password with only number and text and atleast 5 characters'
             )
             .isLength({min : 5 })
-            .isAlphanumeric()
+            .isAlphanumeric() ,
+            
+        body('confirmPassword')
+            .custom((value , {req}) => {
+               if(value !== req.body.password) {
+                   throw new Error('Password has to match');
+               }
+               return true;
+            })
     ],
     authController.postSignup
 );
